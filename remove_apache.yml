@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: ----REMOVE PACKAGE APACHE----
+      ansible.builtin.apt:
+        name: apache2
+        state: absent
+    - name: ----REMOVE PHP----
+      ansible.builtin.apt:
+        name: libapache2-mod-php
+        state: absent
