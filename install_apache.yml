@@ -2,13 +2,29 @@
 - hosts: all
   become: true
   tasks:
-    - name: install apache2 package
+    # --- DÀNH CHO UBUNTU/DEBIAN ---
+    - name: install apache2 package (Ubuntu)
       ansible.builtin.apt:
         name: apache2
         state: present
-    - name: update repository index
+      when: ansible_distribution == "Ubuntu"
+
+    - name: update repository index (Ubuntu)
       ansible.builtin.apt:
-        update_cache: yes 
-    - name: add php support for apache
-      ansible.builtin.apt:
-        name: libapache2-mod-php
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+    # --- DÀNH CHO CENTOS/REDHAT ---
+    - name: install httpd package (CentOS)
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      when: ansible_distribution == "CentOS"
+
+
+    - name: start httpd service (CentOS)
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "CentOS"
