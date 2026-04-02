@@ -3,28 +3,10 @@
   become: true
   tasks:
     # --- DÀNH CHO UBUNTU/DEBIAN ---
-    - name: install apache2 package (Ubuntu)
-      ansible.builtin.apt:
-        name: apache2
-        state: present
-      when: ansible_distribution == "Ubuntu"
-
-    - name: update repository index (Ubuntu)
-      ansible.builtin.apt:
+    - name: install apache, php package
+      ansible.builtin.package:
+        name: 
+          - "{{ apache_package }}"
+          - "{{ php_package }}"
+        state: latest
         update_cache: yes
-      when: ansible_distribution == "Ubuntu"
-
-    # --- DÀNH CHO CENTOS/REDHAT ---
-    - name: install httpd package (CentOS)
-      ansible.builtin.dnf:
-        name: httpd
-        state: present
-      when: ansible_distribution == "CentOS"
-
-
-    - name: start httpd service (CentOS)
-      ansible.builtin.service:
-        name: httpd
-        state: started
-        enabled: yes
-      when: ansible_distribution == "CentOS"

@@ -1,0 +1,63 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install updates (CentOS)
+      tags: always
+      ansible.builtin.dnf:
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: install updates (Ubuntu)
+      tags: always
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: web_servers
+  become: true
+  tasks:
+    - name: install apache and php for Ubuntu servers
+      tags: apache,apache2,ubuntu
+      ansible.builtin.apt:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+    - name: install apache and php for CentOS servers
+      tags: apache,httpd,centos
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - php
+        state: latest
+      when: ansible_distribution == "CentOS"
+- hosts: db_servers
+  become: true
+  tasks:
+    - name: install maria database for Ubuntu server
+      tags: ubuntu,mariadb,db
+      ansible.builtin.apt:
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+    - name: install maria database for CentOS server
+      tags: centos,mariadb,db
+      ansible.builtin.dnf:
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "CentOS"
+- hosts: file_servers
+  become: true
+  tasks:
+    - name: install file server
+      tags: samba
+      ansible.builtin.package:
+        name: samba
+        state: latest

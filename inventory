@@ -1,5 +1,9 @@
-192.168.80.30 ansible_user=vinh9x66
-192.168.80.31 ansible_user=vinh9x66
-192.168.80.32 ansible_user=vinh9x66
-192.168.80.28 ansible_user=vinh9x66
+[web_servers]
+192.168.80.30 ansible_user=vinh9x66 apache_package=apache2 php_package=libapache2-mod-php
+192.168.80.28 ansible_user=vinh9x66 apache_package=httpd php_package=php
+
+[file_servers]
+192.168.80.31 ansible_user=vinh9x66 apache_package=apache2 php_package=libapache2-mod-p>
+[db_servers]
+192.168.80.32 ansible_user=vinh9x66 apache_package=apache2 php_package=libapache2-mod-p>
 
